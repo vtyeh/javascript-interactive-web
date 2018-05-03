@@ -7,9 +7,9 @@ var $countryInput = document.querySelector("#country");
 var $shapeInput = document.querySelector("#shape");
 var $searchBtn = document.querySelector("#search");
 let start = 0;
-let end = 4;
+let end = 50;
 let page = 1;
-let pages_length = Math.round((dataSet.length)/4);
+let pages_length = Math.round((dataSet.length)/50);
 let total_results = dataSet.length;
 console.log(pages_length);
 
@@ -173,8 +173,8 @@ $nextBtn.addEventListener("click", function handleNext(event){
 	event.preventDefault();
 	if (page < pages_length){
 		page += 1;
-		start +=4;
-		end +=4;
+		start +=50;
+		end +=50;
 		renderTable(start, end);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = end;
@@ -185,8 +185,8 @@ $prevBtn.addEventListener("click", function handlePrev(event){
 	event.preventDefault();
 	if (page > 1){
 		page -= 1;
-		start -=4;
-		end -=4;
+		start -=50;
+		end -=50;
 		renderTable(start, end);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = end;
