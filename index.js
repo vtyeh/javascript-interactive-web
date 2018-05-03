@@ -6,68 +6,12 @@ var $stateInput = document.querySelector("#state");
 var $countryInput = document.querySelector("#country");
 var $shapeInput = document.querySelector("#shape");
 var $searchBtn = document.querySelector("#search");
-
-var states = {
-  'Alabama': 'AL',
-  'Alaska': 'AK',
-  'American Samoa': 'AS',
-  'Arizona': 'AZ',
-  'Arkansas': 'AR',
-  'California': 'CA',
-  'Colorado': 'CO',
-  'Connecticut': 'CT',
-  'Delaware': 'DE',
-  'District Of Columbia': 'DC',
-  'Federated States Of Micronesia': 'FM',
-  'Florida': 'FL',
-  'Georgia': 'GA',
-  'Guam': 'GU',
-  'Hawaii': 'HI',
-  'Idaho': 'ID',
-  'Illinois': 'IL',
-  'Indiana': 'IN',
-  'Iowa': 'IA',
-  'Kansas': 'KS',
-  'Kentucky': 'KY',
-  'Louisiana': 'LA',
-  'Maine': 'ME',
-  'Marshall Islands': 'MH',
-  'Maryland': 'MD',
-  'Massachusetts': 'MA',
-  'Michigan': 'MI',
-  'Minnesota': 'MN',
-  'Mississippi': 'MS',
-  'Missouri': 'MO',
-  'Montana': 'MT',
-  'Nebraska': 'NE',
-  'Nevada': 'NV',
-  'New Hampshire': 'NH',
-  'New Jersey': 'NJ',
-  'New Mexico': 'NM',
-  'New York': 'NY',
-  'North Carolina': 'NC',
-  'North Dakota': 'ND',
-  'Northern Mariana Islands': 'MP',
-  'Ohio': 'OH',
-  'Oklahoma': 'OK',
-  'Oregon': 'OR',
-  'Palau': 'PW',
-  'Pennsylvania': 'PA',
-  'Puerto Rico': 'PR',
-  'Rhode Island': 'RI',
-  'South Carolina': 'SC',
-  'South Dakota': 'SD',
-  'Tennessee': 'TN',
-  'Texas': 'TX',
-  'Utah': 'UT',
-  'Vermont': 'VT',
-  'Virgin Islands': 'VI',
-  'Virginia': 'VA',
-  'Washington': 'WA',
-  'West Virginia': 'WV',
-  'Wisconsin': 'WI',
-  'Wyoming': 'WY'
-};
+let start = 0;
+let end = 4;
+let page = 1;
+let pages_length = Math.round((dataSet.length)/4);
+let total_results = dataSet.length;
+console.log(pages_length);
 
 // Add an event listener to the searchButton, call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
@@ -76,16 +20,23 @@ $searchBtn.addEventListener("click", handleSearchButtonClick);
 var filteredData = dataSet;
 
 // renderTable renders the filteredAddresses to the tbody
-function renderTable() {
+function renderTable(begin,stop) {
 	$tbody.innerHTML = "";
-	for (var i = 0, ii = filteredData.length; i<ii; i++) {
+	for (var i = start, ii = end; i<ii; i++) {
 
 		// Get get the current alien sighting object and its fields
+		
 		var sighting = filteredData[i];
-		var fields = Object.keys(sighting);
+		console.log(filteredData[i]);
+		if (sighting != null) {
+			var fields = Object.keys(sighting);
+		}
+		else {
+			
+		};
 
 		// Create a new row in the tbody, set the index to be i + startingIndex
-		var $row = $tbody.insertRow(i);
+		var $row = $tbody.insertRow();
 		for (var j = 0, jj = fields.length; j<jj; j++) {
 
 			// For every field in the address object, create a new cell 
@@ -93,8 +44,8 @@ function renderTable() {
 			var field = fields[j];
 			var $cell = $row.insertCell(j);
 			$cell.innerText = sighting[field];
-		}
-	}
+		};
+	};
 }
 
 function filter(dataSet, criteria) {
@@ -105,16 +56,11 @@ function filter(dataSet, criteria) {
 	});
 }
 
-function getAbbr(key) {
-	var abbr = states[key].toLowerCase();
-	return abbr
-}
-
 function handleSearchButtonClick() {
 	// Format the user's search by removing leading and trailing whitespace, lowercase the string
 	var filterDate =$dateInput.value.trim();
 	var filterCity =$cityInput.value.trim().toLowerCase();
-	var filterState = getAbbr($stateInput.value);
+	var filterState = $stateInput.value.trim().toLowerCase();
 	var filterCountry =$countryInput.value.trim().toLowerCase();
 	var filterShape =$shapeInput.value.trim().toLowerCase();
 
@@ -203,9 +149,47 @@ function handleSearchButtonClick() {
 		filteredData = filter(dataSet, {'shape': filterShape});
 	};
 	
-	renderTable();
+	renderTable(start, end);
+	total_results = filteredData.length;
+	$displayNum1.innerHTML = 1;
+	$displayNum2.innerHTML = end;
+	$displayNum3.innerHTML = total_results;
 }
 
-renderTable();
+renderTable(start, end);
 
+let $displayNum1 = document.querySelector("#displayNum1");
+let $displayNum2 = document.querySelector("#displayNum2");
+let $displayNum3 = document.querySelector("#displayNum3");
+$displayNum1.innerHTML = 1;
+$displayNum2.innerHTML = end;
+$displayNum3.innerHTML = total_results;
+
+
+let $nextBtn = document.querySelector(".next");
+let $prevBtn = document.querySelector(".previous");
+
+$nextBtn.addEventListener("click", function handleNext(event){
+	event.preventDefault();
+	if (page < pages_length){
+		page += 1;
+		start +=4;
+		end +=4;
+		renderTable(start, end);
+		$displayNum1.innerHTML = start + 1;
+		$displayNum2.innerHTML = end;
+	};
+});
+
+$prevBtn.addEventListener("click", function handlePrev(event){
+	event.preventDefault();
+	if (page > 1){
+		page -= 1;
+		start -=4;
+		end -=4;
+		renderTable(start, end);
+		$displayNum1.innerHTML = start + 1;
+		$displayNum2.innerHTML = end;
+	};
+});
 

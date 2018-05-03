@@ -77,12 +77,17 @@ h2 {
     margin-top: 20px;
 }
 
-.pagination {
-    margin-left: 350px;
+.previous a, .next a {
+    font-family: 'Courier New', sans-serif;
+    color: black;
 }
 
-.pagination li a{
-    color: #727272;
+.display {
+    font-family: 'Courier New', sans-serif;
+}
+
+.bold {
+    font-weight: bold;
 }
 
 @media (max-width: 650px) {
@@ -90,5 +95,21 @@ h2 {
         width: 180px;
         margin-left: 9px;
         margin-top: 5px;
+    }
+    #search {
+        width: 180px;
+    }
+
+    .panel {
+        width: 400px;
+    }
+
+    h2 {
+        font-size: 25px;
+    }
+
+    .display {
+        font-size: 12px;
+        text-align: center;
     }
 }
