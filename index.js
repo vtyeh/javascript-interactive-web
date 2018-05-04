@@ -6,8 +6,10 @@ var $stateInput = document.querySelector("#state");
 var $countryInput = document.querySelector("#country");
 var $shapeInput = document.querySelector("#shape");
 var $searchBtn = document.querySelector("#search");
+
+// Set variable for displaying number of results
 let start = 0;
-let end = 4;
+let stop = 4;
 let page = 1;
 let pages_length = Math.round((dataSet.length)/4);
 var total_results = dataSet.length;
@@ -20,9 +22,9 @@ $searchBtn.addEventListener("click", handleSearchButtonClick);
 var filteredData = dataSet;
 
 // renderTable renders the filteredAddresses to the tbody
-function renderTable(begin,stop) {
+function renderTable(begin,end) {
 	$tbody.innerHTML = "";
-	if (filteredData.length < stop) {
+	if (filteredData.length < end) {
 		for (var i = begin, ii = filteredData.length; i<ii; i++) {
 			var sighting = filteredData[i];
 			console.log(filteredData[i]);
@@ -42,7 +44,7 @@ function renderTable(begin,stop) {
 		}
 	}
 	else {
-		for (var i = begin, ii = stop; i<ii; i++) {
+		for (var i = begin, ii = end; i<ii; i++) {
 
 		// Get get the current alien sighting object and its fields
 		var sighting = filteredData[i];
@@ -166,26 +168,26 @@ function handleSearchButtonClick() {
 		filteredData = filter(dataSet, {'shape': filterShape});
 	};
 	
-	renderTable(start, end);
+	renderTable(start, stop);
 	total_results = filteredData.length;
 	$displayNum1.innerHTML = 1;
 
-	if (filteredData.length < end){
+	if (filteredData.length < stop){
 		$displayNum2.innerHTML = filteredData.length;
 	}
 	else {
-		$displayNum2.innerHTML = end;
+		$displayNum2.innerHTML = stop;
 	};
 	$displayNum3.innerHTML = total_results;
 }
 
-renderTable(start, end);
+renderTable(start, stop);
 
 let $displayNum1 = document.querySelector("#displayNum1");
 let $displayNum2 = document.querySelector("#displayNum2");
 let $displayNum3 = document.querySelector("#displayNum3");
 $displayNum1.innerHTML = 1;
-$displayNum2.innerHTML = end;
+$displayNum2.innerHTML = stop;
 $displayNum3.innerHTML = total_results;
 
 
@@ -198,9 +200,9 @@ $nextBtn.addEventListener("click", function handleNext(event){
 		page += 1;
 		start +=4;
 		end +=4;
-		renderTable(start, end);
+		renderTable(start, stop);
 		$displayNum1.innerHTML = start + 1;
-		$displayNum2.innerHTML = end;
+		$displayNum2.innerHTML = stop;
 	};
 });
 
@@ -210,8 +212,8 @@ $prevBtn.addEventListener("click", function handlePrev(event){
 		page -= 1;
 		start -=4;
 		end -=4;
-		renderTable(start, end);
+		renderTable(start, stop);
 		$displayNum1.innerHTML = start + 1;
-		$displayNum2.innerHTML = end;
+		$displayNum2.innerHTML = stop;
 	};
 });
