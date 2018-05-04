@@ -9,9 +9,9 @@ var $searchBtn = document.querySelector("#search");
 
 // Set variable for displaying number of results
 let start = 0;
-let stop = 4;
+let stop = 50;
 let page = 1;
-let pages_length = Math.round((dataSet.length)/4);
+let pages_length = Math.round((dataSet.length)/50);
 var total_results = dataSet.length;
 console.log(pages_length);
 
@@ -198,8 +198,8 @@ $nextBtn.addEventListener("click", function handleNext(event){
 	event.preventDefault();
 	if (page < pages_length){
 		page += 1;
-		start +=4;
-		end +=4;
+		start +=50;
+		stop +=50;
 		renderTable(start, stop);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = stop;
@@ -210,8 +210,8 @@ $prevBtn.addEventListener("click", function handlePrev(event){
 	event.preventDefault();
 	if (page > 1){
 		page -= 1;
-		start -=4;
-		end -=4;
+		start -=50;
+		stop -=50;
 		renderTable(start, stop);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = stop;
