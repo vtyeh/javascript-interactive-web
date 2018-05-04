@@ -54,8 +54,6 @@ function renderTable(begin,end) {
 
 		// Get get the current alien sighting object and its fields
 		var sighting = filteredData[i];
-		console.log(filteredData[i]);
-		//if (sighting != null) {
 		var fields = Object.keys(sighting);
 
 		// Create a new row in the tbody, set the index to be i + startingIndex
