@@ -7,10 +7,10 @@ var $countryInput = document.querySelector("#country");
 var $shapeInput = document.querySelector("#shape");
 var $searchBtn = document.querySelector("#search");
 let start = 0;
-let end = 50;
+let end = 4;
 let page = 1;
-let pages_length = Math.round((dataSet.length)/50);
-let total_results = dataSet.length;
+let pages_length = Math.round((dataSet.length)/4);
+var total_results = dataSet.length;
 console.log(pages_length);
 
 // Add an event listener to the searchButton, call handleSearchButtonClick when clicked
@@ -22,28 +22,44 @@ var filteredData = dataSet;
 // renderTable renders the filteredAddresses to the tbody
 function renderTable(begin,stop) {
 	$tbody.innerHTML = "";
-	for (var i = start, ii = end; i<ii; i++) {
-
-		// Get get the current alien sighting object and its fields
-		
-		var sighting = filteredData[i];
-		console.log(filteredData[i]);
-		if (sighting != null) {
+	if (filteredData.length < stop) {
+		for (var i = begin, ii = filteredData.length; i<ii; i++) {
+			var sighting = filteredData[i];
+			console.log(filteredData[i]);
+			//if (sighting != null) {
 			var fields = Object.keys(sighting);
-		}
-		else {
-			
-		};
 
-		// Create a new row in the tbody, set the index to be i + startingIndex
-		var $row = $tbody.insertRow();
-		for (var j = 0, jj = fields.length; j<jj; j++) {
+			// Create a new row in the tbody, set the index to be i + startingIndex
+			var $row = $tbody.insertRow();
+			for (var j = 0, jj = fields.length; j<jj; j++) {
 
 			// For every field in the address object, create a new cell 
 			// and set its inner text to be the current value at the current address's field
 			var field = fields[j];
 			var $cell = $row.insertCell(j);
 			$cell.innerText = sighting[field];
+			}
+		}
+	}
+	else {
+		for (var i = begin, ii = stop; i<ii; i++) {
+
+		// Get get the current alien sighting object and its fields
+		var sighting = filteredData[i];
+		console.log(filteredData[i]);
+		//if (sighting != null) {
+		var fields = Object.keys(sighting);
+
+		// Create a new row in the tbody, set the index to be i + startingIndex
+		var $row = $tbody.insertRow();
+			for (var j = 0, jj = fields.length; j<jj; j++) {
+
+			// For every field in the address object, create a new cell 
+			// and set its inner text to be the current value at the current address's field
+			var field = fields[j];
+			var $cell = $row.insertCell(j);
+			$cell.innerText = sighting[field];
+			};
 		};
 	};
 }
@@ -138,6 +154,7 @@ function handleSearchButtonClick() {
 	}
 	else if (filterCity) {
 		filteredData = filter(dataSet, {'city': filterCity});
+		console.log(filteredData);
 	}
 	else if (filterState) {
 		filteredData = filter(dataSet, {'state': filterState});
@@ -152,7 +169,13 @@ function handleSearchButtonClick() {
 	renderTable(start, end);
 	total_results = filteredData.length;
 	$displayNum1.innerHTML = 1;
-	$displayNum2.innerHTML = end;
+
+	if (filteredData.length < end){
+		$displayNum2.innerHTML = filteredData.length;
+	}
+	else {
+		$displayNum2.innerHTML = end;
+	};
 	$displayNum3.innerHTML = total_results;
 }
 
@@ -173,8 +196,8 @@ $nextBtn.addEventListener("click", function handleNext(event){
 	event.preventDefault();
 	if (page < pages_length){
 		page += 1;
-		start +=50;
-		end +=50;
+		start +=4;
+		end +=4;
 		renderTable(start, end);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = end;
@@ -185,11 +208,10 @@ $prevBtn.addEventListener("click", function handlePrev(event){
 	event.preventDefault();
 	if (page > 1){
 		page -= 1;
-		start -=50;
-		end -=50;
+		start -=4;
+		end -=4;
 		renderTable(start, end);
 		$displayNum1.innerHTML = start + 1;
 		$displayNum2.innerHTML = end;
 	};
 });
-
