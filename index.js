@@ -12,8 +12,14 @@ let start = 0;
 let stop = 50;
 let page = 1;
 let pages_length = Math.round((dataSet.length)/50);
-var total_results = dataSet.length;
-console.log(pages_length);
+let total_results = dataSet.length;
+let $displayNum1 = document.querySelector("#displayNum1");
+let $displayNum2 = document.querySelector("#displayNum2");
+let $displayNum3 = document.querySelector("#displayNum3");
+
+// Set variables for page navigation
+let $nextBtn = document.querySelector(".next");
+let $prevBtn = document.querySelector(".previous");
 
 // Add an event listener to the searchButton, call handleSearchButtonClick when clicked
 $searchBtn.addEventListener("click", handleSearchButtonClick);
@@ -24,11 +30,11 @@ var filteredData = dataSet;
 // renderTable renders the filteredAddresses to the tbody
 function renderTable(begin,end) {
 	$tbody.innerHTML = "";
+
+	// Create if statement b/c sometimes filtered results are less than the preset number of displayed results and it loops too many times
 	if (filteredData.length < end) {
 		for (var i = begin, ii = filteredData.length; i<ii; i++) {
 			var sighting = filteredData[i];
-			console.log(filteredData[i]);
-			//if (sighting != null) {
 			var fields = Object.keys(sighting);
 
 			// Create a new row in the tbody, set the index to be i + startingIndex
@@ -66,6 +72,7 @@ function renderTable(begin,end) {
 	};
 }
 
+// Create function that filters the data
 function filter(dataSet, criteria) {
 	return dataSet.filter(function(sighting) {
 		return Object.keys(criteria).every(function(c) {
@@ -74,7 +81,9 @@ function filter(dataSet, criteria) {
 	});
 }
 
+// Create a function that handles the search button
 function handleSearchButtonClick() {
+
 	// Format the user's search by removing leading and trailing whitespace, lowercase the string
 	var filterDate =$dateInput.value.trim();
 	var filterCity =$cityInput.value.trim().toLowerCase();
@@ -82,6 +91,7 @@ function handleSearchButtonClick() {
 	var filterCountry =$countryInput.value.trim().toLowerCase();
 	var filterShape =$shapeInput.value.trim().toLowerCase();
 
+	// Create an if/elseif statement for all possible search combinations for filtering data
 	if (filterDate && filterCity && filterState && filterCountry && filterShape) {
 		filteredData = filter(dataSet, {'datetime': filterDate, 'city': filterCity, 'state': filterState, 'country': filterCountry, 'shape': filterShape});
 	}
@@ -156,7 +166,6 @@ function handleSearchButtonClick() {
 	}
 	else if (filterCity) {
 		filteredData = filter(dataSet, {'city': filterCity});
-		console.log(filteredData);
 	}
 	else if (filterState) {
 		filteredData = filter(dataSet, {'state': filterState});
@@ -168,10 +177,16 @@ function handleSearchButtonClick() {
 		filteredData = filter(dataSet, {'shape': filterShape});
 	};
 	
+	// Render filtered data table
 	renderTable(start, stop);
+
+	// Set total results to new length of filtered data
 	total_results = filteredData.length;
+
+	//  Display how many results were found
 	$displayNum1.innerHTML = 1;
 
+	// Create if statement because sometimes results are less than the preset number of displayed results
 	if (filteredData.length < stop){
 		$displayNum2.innerHTML = filteredData.length;
 	}
@@ -181,19 +196,7 @@ function handleSearchButtonClick() {
 	$displayNum3.innerHTML = total_results;
 }
 
-renderTable(start, stop);
-
-let $displayNum1 = document.querySelector("#displayNum1");
-let $displayNum2 = document.querySelector("#displayNum2");
-let $displayNum3 = document.querySelector("#displayNum3");
-$displayNum1.innerHTML = 1;
-$displayNum2.innerHTML = stop;
-$displayNum3.innerHTML = total_results;
-
-
-let $nextBtn = document.querySelector(".next");
-let $prevBtn = document.querySelector(".previous");
-
+// Create event listeners for page clickers
 $nextBtn.addEventListener("click", function handleNext(event){
 	event.preventDefault();
 	if (page < pages_length){
@@ -217,3 +220,9 @@ $prevBtn.addEventListener("click", function handlePrev(event){
 		$displayNum2.innerHTML = stop;
 	};
 });
+
+// Render table of original data set and display of results
+renderTable(start, stop);
+$displayNum1.innerHTML = 1;
+$displayNum2.innerHTML = stop;
+$displayNum3.innerHTML = total_results;
