@@ -8,3 +8,5 @@ There is just one tiny problem though... Our collection is too large to search t
 That's why we are hiring you. We need you to write code that will create a table dynamically based upon a dataset we provide. We also need to allow our users to search through the table for specific pieces of information. There's a catch though... We only use pure JavaScript, HTML, and CSS on our web pages. They are the only coding languages which can be trusted.
 
 You can handle this... Right? The planet Earth needs to know what we have found!
+
+![png](github_img/readme.png)
